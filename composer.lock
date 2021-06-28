@@ -845,12 +845,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mirarus/bmvc-core.git",
-                "reference": "2f72e38136e38806bfa31d18fb53c7ce5d6b01b7"
+                "reference": "6664386b2716895a307f20a8325fd6aeded18277"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mirarus/bmvc-core/zipball/2f72e38136e38806bfa31d18fb53c7ce5d6b01b7",
-                "reference": "2f72e38136e38806bfa31d18fb53c7ce5d6b01b7",
+                "url": "https://api.github.com/repos/mirarus/bmvc-core/zipball/6664386b2716895a307f20a8325fd6aeded18277",
+                "reference": "6664386b2716895a307f20a8325fd6aeded18277",
                 "shasum": ""
             },
             "require": {
@@ -891,9 +891,9 @@
             "description": "Mirarus BMVC Core (Basic MVC Core)",
             "support": {
                 "issues": "https://github.com/mirarus/bmvc-core/issues",
-                "source": "https://github.com/mirarus/bmvc-core/tree/main"
+                "source": "https://github.com/mirarus/bmvc-core/tree/0.88"
             },
-            "time": "2021-06-28T11:33:52+00:00"
+            "time": "2021-06-28T12:21:40+00:00"
         },
         {
             "name": "monolog/monolog",
