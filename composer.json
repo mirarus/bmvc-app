@@ -1,0 +1,32 @@
+{
+	"name": "mirarus/bmvc",
+	"description": "Mirarus BMVC (Basic MVC)",
+	"type": "project",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Ali Güçlü",
+			"email": "aliguclutr@gmail.com"
+		}
+	],
+	"require": {
+		"php": "^7.3 || ^8.0",
+		"mirarus/bmvc-core": "dev-main"
+	},
+	"require-dev": {
+		"heroku/heroku-buildpack-php": "*"
+	},
+	"scripts": {
+		"post-install-cmd": [
+			"@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+		],
+		"post-root-package-install": [
+			"@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+		]
+	},
+	"autoload": {
+		"psr-4": {
+			"App\\": "App/"
+		}
+	}
+}
