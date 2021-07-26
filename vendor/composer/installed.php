@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => 'dfb1427d2db4a5de0b89c2f1e4e36e6d3c545d82',
+        'reference' => '8f9defdf13a530b328563728a192755b576bf903',
         'name' => 'mirarus/bmvc-app',
         'dev' => true,
     ),
@@ -142,7 +142,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => 'dfb1427d2db4a5de0b89c2f1e4e36e6d3c545d82',
+            'reference' => '8f9defdf13a530b328563728a192755b576bf903',
             'dev_requirement' => false,
         ),
         'mirarus/bmvc-core' => array(
@@ -157,12 +157,12 @@
             'dev_requirement' => false,
         ),
         'mirarus/bmvc-libs' => array(
-            'pretty_version' => '0.10',
-            'version' => '0.10.0.0',
+            'pretty_version' => '0.11',
+            'version' => '0.11.0.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../mirarus/bmvc-libs',
             'aliases' => array(),
-            'reference' => 'c207d84bb7ccb623aecade0f63e32c61695435ba',
+            'reference' => '61e963786277c790284db88ec3f6e4e0324e0ba6',
             'dev_requirement' => false,
         ),
         'monolog/monolog' => array(
@@ -219,8 +219,8 @@
         'psr/log-implementation' => array(
             'dev_requirement' => false,
             'provided' => array(
-                0 => '1.0',
-                1 => '1.0.0',
+                0 => '1.0.0',
+                1 => '1.0',
             ),
         ),
         'psr/simple-cache' => array(
