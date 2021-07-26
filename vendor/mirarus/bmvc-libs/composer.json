@@ -1,0 +1,26 @@
+{
+	"name": "mirarus/bmvc-libs",
+	"description": "Mirarus BMVC Libs (Basic MVC Libs)",
+	"type": "library",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Ali Güçlü",
+			"email": "aliguclutr@gmail.com"
+		}
+	],
+	"require": {
+		"php": "^7.3 || ^8.0",
+		"ext-json": "*",
+		"ext-pdo": "*",
+		"ext-mbstring": "*",
+		"ext-intl" : "*",
+		"monolog/monolog": "^2.3",
+		"filp/whoops": "^2.14"
+	},
+	"autoload": {
+		"psr-4": {
+			"BMVC\\Libs\\": "src"
+		}
+	}
+}

@@ -8,16 +8,34 @@
  * @author  Ali Güçlü (Mirarus) <aliguclutr@gmail.com>
  * @link https://github.com/mirarus/bmvc-core
  * @license http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version 5.5
+ * @version 5.7
  */
 
 namespace BMVC\Core;
 
-use BMVC\Libs\Dir;
+use BMVC\Libs\{classCall, Dir};
 
 final class Controller
 {
-	use Call;
+
+	/**
+	 * @param string|null  $namespace
+	 * @param bool|boolean $new
+	 */
+	public static function namespace(string $namespace=null, bool $new=false)
+	{
+		classCall::init(get_class())->namespace($namespace, $new);
+	}
+
+	/**
+	 * @param mixed       $action
+	 * @param array|null  $params
+	 * @param object|null &$return
+	 */
+	public static function call($action, array $params=null, object &$return=null)
+	{
+		classCall::init(get_class())->call($action, $params, $return);
+	}
 
 	/**
 	 * @param string      $class
@@ -25,7 +43,7 @@ final class Controller
 	 */
 	public static function import(string $class, object &$return=null)
 	{
-		self::get('controller', $class, $get);
+		classCall::init(get_class())->get('controller', $class, $get);
 
 		if (@$get['_class'] != @$get['_class_']) {
 			

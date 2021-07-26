@@ -8,7 +8,7 @@
  * @author  Ali Güçlü (Mirarus) <aliguclutr@gmail.com>
  * @link https://github.com/mirarus/bmvc-core
  * @license http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version 6.9
+ * @version 7.1
  */
 
 namespace BMVC\Core;
@@ -25,6 +25,10 @@ final class App
 	private static $init = false;
 	
 	public static $dotenv;
+	public static $url;
+	public static $page;
+	public static $timezone;
+	public static $environment;
 
 	/**
 	 * @var array
@@ -68,6 +72,7 @@ final class App
 		self::_routes();
 
 		if (@$data['namespaces'] != null) self::$namespaces = $data['namespaces'];
+
 		Controller::namespace(@self::$namespaces['controller']);
 		Model::namespace(@self::$namespaces['model']);
 		View::namespace((@self::$namespaces['view'] ? self::$namespaces['view'] : @$_ENV['VIEW_DIR']));
@@ -82,8 +87,9 @@ final class App
 	 * @param string|null  $value
 	 * @param bool|boolean $get
 	 * @param string|null  $sub
+	 * @param bool|boolean $new
 	 */
-	public static function SGnamespace($par, string $value=null, bool $get=false, string $sub=null)
+	public static function SGnamespace($par, string $value=null, bool $get=false, string $sub=null, bool $new=false)
 	{
 		$sub = ($sub != null) ? (CL::trim($sub) . '\\') : null;
 
@@ -117,7 +123,7 @@ final class App
 				return self::$namespaces;
 			}
 		}
-		# if ($get === false) return new self;
+		if ($new == true) return new self;
 	}
 
 	/**
@@ -150,23 +156,25 @@ final class App
 
 	private static function initDefine(): void
 	{
-		@define('URL', base_url());
+		# URL
+		self::$url = base_url();
+		@define('URL', self::$url);
+
+		# PAGE
+		self::$page = page_url();
+		@define('PAGE', self::$page);
 
 		# TIMEZONE
-		if (isset($_ENV['TIMEZONE']) && $_ENV['TIMEZONE'] != null) {
-			@define('TIMEZONE', $_ENV['TIMEZONE']);
-		} else {
-			@define('TIMEZONE', 'Europe/Istanbul');
-		}
-		@date_default_timezone_set(TIMEZONE);
+		self::$timezone = ((isset($_ENV['TIMEZONE']) && $_ENV['TIMEZONE'] != null) ? $_ENV['TIMEZONE'] : 'Europe/Istanbul');
+		@define('TIMEZONE', self::$timezone);
+
+		@date_default_timezone_set(self::$timezone);
 
 		# ENVIRONMENT
-		if (isset($_ENV['ENVIRONMENT']) && $_ENV['ENVIRONMENT'] != null) {
-			@define('ENVIRONMENT', $_ENV['ENVIRONMENT']);
-		} else {
-			@define('ENVIRONMENT', 'development');
-		}
-		switch (ENVIRONMENT) {
+		self::$environment = ((isset($_ENV['ENVIRONMENT']) && $_ENV['ENVIRONMENT'] != null) ? $_ENV['ENVIRONMENT'] : 'development');
+		@define('ENVIRONMENT', self::$environment);
+
+		switch (self::$environment) {
 			case 'staging':
 			case 'development':
 			@error_reporting(-1);
@@ -206,6 +214,7 @@ final class App
 			}
 		}
 
+		Whoops::set('environment', self::$environment);
 		Whoops::init();
 	}
 
@@ -227,7 +236,7 @@ final class App
 		@header("Strict-Transport-Security: max-age=15552000; preload");
 		@header("X-Frame-Options: sameorigin");
 		@header("X-Powered-By: PHP/BMVC");
-		(page_url() ? @header("X-Url: " . page_url()) : null);
+		if (self::$page) @header("X-Url: " . self::$page);
 		@header("X-XSS-Protection: 1; mode=block");
 	}
 
@@ -301,7 +310,7 @@ final class App
 			if (@$route['namespaces'] != null && is_array($route['namespaces'])) {
 				foreach ($route['namespaces'] as $key => $val) {
 					if (array_key_exists($key, self::$namespaces)) {
-						call_user_func_array(["BMVC\Core\\" . ucfirst($key), 'namespace'], [$val]);
+						call_user_func_array([CL::implode([__NAMESPACE__, ucfirst($key)]), 'namespace'], [$val]);
 					}
 				}
 			}

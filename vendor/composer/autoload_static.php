@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInite9faede23556196151f5e0a52dbd981f
+class ComposerStaticInitbac9eee425d277053c0e3fa389dfbd8f
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -12,10 +12,10 @@ class ComposerStaticInite9faede23556196151f5e0a52dbd981f
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
         '60799491728b879e74601d83e38b2cad' => __DIR__ . '/..' . '/illuminate/collections/helpers.php',
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
-        '8825ede83f2f289127722d4e842cf7e8' => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme/bootstrap.php',
         'e69f7f6ee287b969198c3c9d6777bd38' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/bootstrap.php',
-        '0d59ee240a4cd96ddbb4ff164fccea4d' => __DIR__ . '/..' . '/symfony/polyfill-php73/bootstrap.php',
+        '8825ede83f2f289127722d4e842cf7e8' => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme/bootstrap.php',
         'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
+        '0d59ee240a4cd96ddbb4ff164fccea4d' => __DIR__ . '/..' . '/symfony/polyfill-php73/bootstrap.php',
         'a1105708a18b76903365ca1c4aa61b02' => __DIR__ . '/..' . '/symfony/translation/Resources/functions.php',
         '72579e7bd17821bb1321b87411366eae' => __DIR__ . '/..' . '/illuminate/support/helpers.php',
         'ef65a1626449d89d0811cf9befce46f0' => __DIR__ . '/..' . '/illuminate/events/functions.php',
@@ -87,6 +87,7 @@ class ComposerStaticInite9faede23556196151f5e0a52dbd981f
         ),
         'B' => 
         array (
+            'BMVC\\Libs\\' => 10,
             'BMVC\\' => 5,
         ),
         'A' => 
@@ -182,8 +183,8 @@ class ComposerStaticInite9faede23556196151f5e0a52dbd981f
         ),
         'Illuminate\\Support\\' => 
         array (
-            0 => __DIR__ . '/..' . '/illuminate/collections',
-            1 => __DIR__ . '/..' . '/illuminate/macroable',
+            0 => __DIR__ . '/..' . '/illuminate/macroable',
+            1 => __DIR__ . '/..' . '/illuminate/collections',
             2 => __DIR__ . '/..' . '/illuminate/support',
         ),
         'Illuminate\\Pipeline\\' => 
@@ -226,6 +227,10 @@ class ComposerStaticInite9faede23556196151f5e0a52dbd981f
         array (
             0 => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon',
         ),
+        'BMVC\\Libs\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/mirarus/bmvc-libs/src',
+        ),
         'BMVC\\' => 
         array (
             0 => __DIR__ . '/..' . '/mirarus/bmvc-core/src',
@@ -238,43 +243,6 @@ class ComposerStaticInite9faede23556196151f5e0a52dbd981f
 
     public static $classMap = array (
         'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
-        'BMVC\\Core\\App' => __DIR__ . '/..' . '/mirarus/bmvc-core/src/Core/App.php',
-        'BMVC\\Core\\Call' => __DIR__ . '/..' . '/mirarus/bmvc-core/src/Core/Call.php',
-        'BMVC\\Core\\Controller' => __DIR__ . '/..' . '/mirarus/bmvc-core/src/Core/Controller.php',
-        'BMVC\\Core\\Model' => __DIR__ . '/..' . '/mirarus/bmvc-core/src/Core/Model.php',
-        'BMVC\\Core\\Route' => __DIR__ . '/..' . '/mirarus/bmvc-core/src/Core/Route.php',
-        'BMVC\\Core\\View' => __DIR__ . '/..' . '/mirarus/bmvc-core/src/Core/View.php',
-        'BMVC\\Exception\\NotFound' => __DIR__ . '/..' . '/mirarus/bmvc-core/src/Exception/NotFound.php',
-        'BMVC\\Libs\\BasicDB' => __DIR__ . '/..' . '/mirarus/bmvc-core/src/Libs/BasicDB.php',
-        'BMVC\\Libs\\Benchmark' => __DIR__ . '/..' . '/mirarus/bmvc-core/src/Libs/Benchmark.php',
-        'BMVC\\Libs\\Browser' => __DIR__ . '/..' . '/mirarus/bmvc-core/src/Libs/Browser.php',
-        'BMVC\\Libs\\CL' => __DIR__ . '/..' . '/mirarus/bmvc-core/src/Libs/CL.php',
-        'BMVC\\Libs\\Cache' => __DIR__ . '/..' . '/mirarus/bmvc-core/src/Libs/Cache.php',
-        'BMVC\\Libs\\CommandClearLog' => __DIR__ . '/..' . '/mirarus/bmvc-core/src/Libs/Console.php',
-        'BMVC\\Libs\\CommandMakeController' => __DIR__ . '/..' . '/mirarus/bmvc-core/src/Libs/Console.php',
-        'BMVC\\Libs\\CommandMakeModel' => __DIR__ . '/..' . '/mirarus/bmvc-core/src/Libs/Console.php',
-        'BMVC\\Libs\\CommandServerStart' => __DIR__ . '/..' . '/mirarus/bmvc-core/src/Libs/Console.php',
-        'BMVC\\Libs\\CommandServerStop' => __DIR__ . '/..' . '/mirarus/bmvc-core/src/Libs/Console.php',
-        'BMVC\\Libs\\Composer' => __DIR__ . '/..' . '/mirarus/bmvc-core/src/Libs/Composer.php',
-        'BMVC\\Libs\\Console' => __DIR__ . '/..' . '/mirarus/bmvc-core/src/Libs/Console.php',
-        'BMVC\\Libs\\Convert' => __DIR__ . '/..' . '/mirarus/bmvc-core/src/Libs/Convert.php',
-        'BMVC\\Libs\\Csrf' => __DIR__ . '/..' . '/mirarus/bmvc-core/src/Libs/Csrf.php',
-        'BMVC\\Libs\\Dir' => __DIR__ . '/..' . '/mirarus/bmvc-core/src/Libs/Dir.php',
-        'BMVC\\Libs\\Filter' => __DIR__ . '/..' . '/mirarus/bmvc-core/src/Libs/Filter.php',
-        'BMVC\\Libs\\Hash' => __DIR__ . '/..' . '/mirarus/bmvc-core/src/Libs/Hash.php',
-        'BMVC\\Libs\\Header' => __DIR__ . '/..' . '/mirarus/bmvc-core/src/Libs/Header.php',
-        'BMVC\\Libs\\Hook' => __DIR__ . '/..' . '/mirarus/bmvc-core/src/Libs/Hook.php',
-        'BMVC\\Libs\\IP' => __DIR__ . '/..' . '/mirarus/bmvc-core/src/Libs/IP.php',
-        'BMVC\\Libs\\Lang' => __DIR__ . '/..' . '/mirarus/bmvc-core/src/Libs/Lang.php',
-        'BMVC\\Libs\\Lib' => __DIR__ . '/..' . '/mirarus/bmvc-core/src/Libs/Lib.php',
-        'BMVC\\Libs\\Log' => __DIR__ . '/..' . '/mirarus/bmvc-core/src/Libs/Log.php',
-        'BMVC\\Libs\\MError' => __DIR__ . '/..' . '/mirarus/bmvc-core/src/Libs/MError.php',
-        'BMVC\\Libs\\MErrorA' => __DIR__ . '/..' . '/mirarus/bmvc-core/src/Libs/MError.php',
-        'BMVC\\Libs\\Request' => __DIR__ . '/..' . '/mirarus/bmvc-core/src/Libs/Request.php',
-        'BMVC\\Libs\\Response' => __DIR__ . '/..' . '/mirarus/bmvc-core/src/Libs/Response.php',
-        'BMVC\\Libs\\Session' => __DIR__ . '/..' . '/mirarus/bmvc-core/src/Libs/Session.php',
-        'BMVC\\Libs\\Validate' => __DIR__ . '/..' . '/mirarus/bmvc-core/src/Libs/Validate.php',
-        'BMVC\\Libs\\Whoops' => __DIR__ . '/..' . '/mirarus/bmvc-core/src/Libs/Whoops.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'JsonException' => __DIR__ . '/..' . '/symfony/polyfill-php73/Resources/stubs/JsonException.php',
         'Normalizer' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/Resources/stubs/Normalizer.php',
@@ -286,9 +254,9 @@ class ComposerStaticInite9faede23556196151f5e0a52dbd981f
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInite9faede23556196151f5e0a52dbd981f::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInite9faede23556196151f5e0a52dbd981f::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInite9faede23556196151f5e0a52dbd981f::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitbac9eee425d277053c0e3fa389dfbd8f::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitbac9eee425d277053c0e3fa389dfbd8f::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitbac9eee425d277053c0e3fa389dfbd8f::$classMap;
 
         }, null, ClassLoader::class);
     }

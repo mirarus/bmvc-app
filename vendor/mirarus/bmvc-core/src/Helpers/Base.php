@@ -51,60 +51,6 @@ function app(string $class=null, string $method=null, array $params=[])
 }
 
 /**
- * @param  mixed  $data
- * @return boolean
- */
-function is_nem($data)
-{
-	return isset($data) && !empty($data);
-}
-
-/**
- * @param  mixed  $data
- * @return boolean
- */
-function nis_em($data)
-{
-	return !isset($data) && empty($data);
-}
-
-/**
- * @param  mixed  $data
- * @return boolean
- */
-function is($data)
-{
-	return isset($data);
-}
-
-/**
- * @param  mixed  $data
- * @return boolean
- */
-function nis($data)
-{
-	return !isset($data);
-}
-
-/**
- * @param  mixed  $data
- * @return boolean
- */
-function nem($data)
-{
-	return !empty($data);
-}
-
-/**
- * @param  mixed  $data
- * @return boolean
- */
-function em($data)
-{
-	return empty($data);
-}
-
-/**
  * @param string       $par
  * @param int|integer  $time
  * @param bool|boolean $stop
@@ -151,22 +97,6 @@ function PageCheck(string $url=null): bool
 }
 
 /**
- * @param string|null $data
- */
-function vd(string $data=null)
-{
-	if ($data == null) {
-		if (isset($_REQUEST['vd'])) {
-			return $_REQUEST['vd'];
-		}
-	} else {
-		if (isset($_REQUEST['vd'][$data])) {
-			return $_REQUEST['vd'][$data];
-		}
-	}
-}
-
-/**
  * @param string       $url
  * @param bool|boolean $return
  */
@@ -176,29 +106,6 @@ function ct(string $url, bool $return=true)
 		return $url . '?ct=' . time();
 	} else {
 		echo $url . '?ct=' . time();
-	}
-}
-
-/**
- * @param  string $email
- * @return bool
- */
-function valid_email(string $email): bool
-{
-	return (bool) filter_var($email, FILTER_VALIDATE_EMAIL);
-}
-
-/**
- * @return mixed
- */
-function _password()
-{
-	$args = func_get_args();
-
-	if ($args[0] == 'hash') {
-		return password_hash(md5($args[1]), PASSWORD_DEFAULT, ['cost' => @$args[2] ? $args[2] : 12]);
-	} elseif ($args[0] == 'verify') {
-		return (bool) password_verify(md5($args[1]), $args[2]);
 	}
 }
 
@@ -374,12 +281,11 @@ function datetotime(string $date, string $format='YYYY-MM-DD')
 
 	return mktime(0, 0, 0, $month, $day, $year);
 }
-	
+
 /**
  * @param string $file
  */
-function ob_template(string $file)
-{
+function ob_template(string $file) {
 	ob_start();
 	require_once $file;
 	$ob_content = ob_get_contents();
@@ -393,4 +299,31 @@ function ob_template(string $file)
 	], url('$2'), $ob_content);
 
 	return $ob_content;
+}
+
+function resize_image($file, $w, $h, $crop=false) {
+	list($width, $height) = getimagesize($file);
+	$r = $width / $height;
+	if ($crop) {
+		if ($width > $height) {
+			$width = ceil($width-($width * abs($r - $w / $h)));
+		} else {
+			$height = ceil($height-($height * abs($r - $w / $h)));
+		}
+		$newwidth = $w;
+		$newheight = $h;
+	} else {
+		if ($w/$h > $r) {
+			$newwidth = $h*$r;
+			$newheight = $h;
+		} else {
+			$newheight = $w/$r;
+			$newwidth = $w;
+		}
+	}
+	$src = imagecreatefromjpeg($file);
+	$dst = imagecreatetruecolor($newwidth, $newheight);
+	imagecopyresampled($dst, $src, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
+
+	return $dst;
 }
