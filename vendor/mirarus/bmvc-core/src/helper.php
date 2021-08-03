@@ -1,6 +1,6 @@
 <?php
 
-BMVC\Libs\Dir::setPath(__DIR__);
+BMVC\Libs\FS::setPath(__DIR__);
 
 /**
  * @return boolean
@@ -72,7 +72,7 @@ function base_url(string $url=null, bool $atRoot=false, bool $atCore=false, bool
 	}
 	return $base_url;
 }
-	
+
 /**
  * @param  string|null  $url
  * @param  bool|boolean $parse
@@ -243,6 +243,39 @@ function _curl(string $url, array $array=[], bool $data=false, bool $option=fals
 	return $data;
 }
 
+
+/**
+ * @param mixed  $money
+ * @param string $type
+ * @param string $locale
+ */
+function _money($money, string $type='currency', string $locale='tr_TR')
+{
+	if (extension_loaded('intl') && class_exists("NumberFormatter")) {
+		if ($type == 'decimal') {
+			$fmt = new NumberFormatter($locale, NumberFormatter::DECIMAL);
+		} elseif ($type == 'currency') {
+			$fmt = new NumberFormatter($locale, NumberFormatter::CURRENCY);
+		}
+		if ($type == 'currency') {
+			return trim($fmt->format($money), '₺') . '₺';
+		} else {
+			return $fmt->format($money);
+		}
+	} else {
+
+		if (!$money) { $money = 0; }
+
+		// if ($locale == 'tr_TR') {
+		if ($type == 'decimal') {
+			return number_format($money, 2, ",", ".");
+		} elseif ($type == 'currency') {
+			return number_format($money, 2, ",", ".") . "₺";
+		}
+		// }
+	}
+}
+
 /**
  * @param mixed        $data
  * @param bool|boolean $stop
@@ -271,11 +304,11 @@ function dump($data, bool $stop=false)
 	}
 }
 
-	
+
 /**
  * Helpers
  */
 array_map(function ($file) {
-	if ($file == BMVC\Libs\Dir::base('Helpers' . DIRECTORY_SEPARATOR . 'index.php')) return false;
+	if ($file == BMVC\Libs\FS::base('Helpers' . DIRECTORY_SEPARATOR . 'index.php')) return false;
 	require_once $file;
-}, glob(BMVC\Libs\Dir::base("Helpers" . DIRECTORY_SEPARATOR . "*.php")));
+}, glob(BMVC\Libs\FS::base("Helpers" . DIRECTORY_SEPARATOR . "*.php")));

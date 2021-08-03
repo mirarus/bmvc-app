@@ -6,15 +6,14 @@
  * Mirarus BMVC
  * @package BMVC\Libs
  * @author  Ali Güçlü (Mirarus) <aliguclutr@gmail.com>
- * @link https://github.com/mirarus/bmvc-core
+ * @link https://github.com/mirarus/bmvc-libs
  * @license http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version 6.3
+ * @version 6.8
  */
 
 namespace BMVC\Libs;
 
 use Exception;
-use BMVC\Core\Route;
 
 class Lang
 {
@@ -41,8 +40,8 @@ class Lang
 
 	public function __construct()
 	{
-		self::$dir = Dir::app(self::$dir);
-		Dir::mk_dir(self::$dir);
+		self::$dir = FS::app(self::$dir);
+		FS::mk_dir(self::$dir);
 
 		$_lang = $_ENV['LANG'];
 		
@@ -51,10 +50,10 @@ class Lang
 			if (is_array($_lang)) {
 
 				$func = array_shift($_lang);
-				$_lang = call_user_func_array($func, $_lang);
+				$lang = call_user_func_array($func, $_lang);
 
-				if ($_lang) {
-					self::$current_lang = self::$lang = $_lang;
+				if ($lang) {
+					self::$current_lang = self::$lang = $lang;
 				}
 			} else {
 				self::$current_lang = self::$lang = $_lang;
@@ -141,31 +140,6 @@ class Lang
 	{
 		return self::_init($text, true, $replace);
 	}
-	
-	#
-	private static function _routes(): void
-	{
-		Route::prefix('lang')::group(function() {
-
-			Route::match(['GET', 'POST'], 'set/{lowercase}', function($lang) {
-				self::set($lang);
-				if (Request::isGet()) {
-					redirect(url());
-				}
-			});
-
-			Route::match(['GET', 'POST'], 'get/{all}', function($url) {
-				$par  = explode('/', $url);
-				$text = array_shift($par);
-
-				if (isset($par[0]) && $par[0] == "true") {
-					self::___($text, Request::request('replace'));
-				} else {
-					self::__($text, Request::request('replace'));
-				}
-			});
-		});
-	}
 
 	/**
 	 * @param string       $text
@@ -206,30 +180,25 @@ class Lang
 
 		$_config = false;
 
-		if (file_exists($file = Dir::implode([self::$dir, 'config.php']))) {
+		if ($file = self::_config_file()) {
 
-			$inc_file = include ($file);
+			$_config = true;
+			$_lang = $file[self::$current_lang];
 
-			if (is_array($inc_file) && !empty($inc_file)) {
-
-				$_config = true;
-				$_lang = $inc_file[self::$current_lang];
-
-				if (isset($_lang)) {
-					$_lang = $_lang['langs'];
-					if (isset($_lang[$text])) {
-						return $_lang[$text];
-					} else {
-						return $text;
-					}
+			if (isset($_lang)) {
+				$_lang = $_lang['langs'];
+				if (isset($_lang[$text])) {
+					return $_lang[$text];
 				} else {
-					throw new Exception('Language Not Found! | Language: ' . self::$current_lang);
+					return $text;
 				}
+			} else {
+				throw new Exception('Language Not Found! | Language: ' . self::$current_lang);
 			}
 		}
 
 		if ($_config == false) {
-			if (file_exists($file = Dir::implode([self::$dir, self::$current_lang . '.php']))) {
+			if (file_exists($file = FS::implode([self::$dir, self::$current_lang . '.php']))) {
 
 				$_lang = [];
 				include $file;
@@ -249,30 +218,23 @@ class Lang
 	{
 		$_config = false;
 
-		if (file_exists($file = Dir::implode([self::$dir, 'config.php']))) {
+		if ($file = self::_config_file()) {
 
-			$inc_file = include ($file);
+			$_config = true;
 
-			if (is_array($inc_file) && !empty($inc_file)) {
-
-				$_config = true;
-
-				if (array_keys($inc_file) != 'index') {
-					return array_keys($inc_file);
-				}
-			}
+			if (array_keys($file) != 'index') return array_keys($file);
 		}
 
 		if ($_config == false) {
 
 			$files = [];
-			foreach (glob(Dir::implode([self::$dir, '*.php'])) as $file) {
-				if ($file != Dir::implode([self::$dir, 'index.php'])) {
+			foreach (glob(FS::implode([self::$dir, '*.php'])) as $file) {
+				if ($file != FS::implode([self::$dir, 'index.php'])) {
 
 					$_lang = [];
 					include $file;
 					if ($_lang != null) {
-						$files[] = Dir::trim(str_replace([self::$dir, '.php'], '', $file));
+						$files[] = FS::trim(str_replace([self::$dir, '.php'], '', $file));
 					}
 				}
 			}
@@ -292,33 +254,28 @@ class Lang
 		$_data = [];
 		$_lang = [];
 
-		if (file_exists($file = Dir::implode([self::$dir, 'config.php']))) {
+		if ($file = self::_config_file()) {
 
-			$inc_file = include ($file);
+			$_lang_ = $file[$_xlang];
 
-			if (is_array($inc_file) && !empty($inc_file)) {
+			if (isset($_lang_) && isset($_lang_['info'])) {
 
-				$_lang_ = $inc_file[$_xlang];
+				$_config = true;
 
-				if (isset($_lang_) && isset($_lang_['info'])) {
+				$_lang = $_lang_['langs'];
 
-					$_config = true;
-
-					$_lang = $_lang_['langs'];
-
-					$_data = [
-						'code' => @$_xlang,
-						'name-global' => @$_lang_['info']['name-global'],
-						'name-local' => @$_lang_['info']['name-local']
-					];
-				} else {
-					throw new Exception('Language Not Found! | Language: ' . $_xlang);
-				}
+				$_data = [
+					'code' => @$_xlang,
+					'name-global' => @$_lang_['info']['name-global'],
+					'name-local' => @$_lang_['info']['name-local']
+				];
+			} else {
+				throw new Exception('Language Not Found! | Language: ' . $_xlang);
 			}
 		}
 
 		if ($_config == false) {
-			if (file_exists($file = Dir::implode([self::$dir, $_xlang . '.php']))) {
+			if (file_exists($file = FS::implode([self::$dir, $_xlang . '.php']))) {
 
 				include $file;
 
@@ -338,6 +295,48 @@ class Lang
 			} else {
 				return $_data;
 			}
+		}
+	}
+
+	/**
+	 * @param array|null &$_file
+	 */
+	private static function _config_file(array &$_file=null)
+	{
+		if (file_exists($file = FS::implode([self::$dir, 'config.php']))) {
+
+			$_file_ = include ($file);
+
+			if (is_array($_file_) && !empty($_file_)) {
+				return $_file = $_file_;
+			}
+		}
+	}
+
+	private static function _routes(): void
+	{
+		if (CL::is_class(\BMVC\Core\Route::class)) {
+
+			\BMVC\Core\Route::prefix('lang')::group(function() {
+
+				\BMVC\Core\Route::match(['GET', 'POST'], 'set/{lowercase}', function($lang) {
+					self::set($lang);
+					if (Request::isGet()) {
+						redirect(url());
+					}
+				});
+
+				\BMVC\Core\Route::match(['GET', 'POST'], 'get/{all}', function($url) {
+					$par  = explode('/', $url);
+					$text = array_shift($par);
+
+					if (isset($par[0]) && $par[0] == "true") {
+						self::___($text, Request::request('replace'));
+					} else {
+						self::__($text, Request::request('replace'));
+					}
+				});
+			});
 		}
 	}
 }

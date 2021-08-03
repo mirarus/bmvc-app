@@ -8,7 +8,7 @@
  * @author  Ali Güçlü (Mirarus) <aliguclutr@gmail.com>
  * @link https://github.com/mirarus/bmvc-libs
  * @license http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version 1.2
+ * @version 1.3
  */
 
 namespace BMVC\Libs;
@@ -83,21 +83,24 @@ class Benchmark
 		for ($i=0; $i < $count; $i++) {
 			if ($i == -1) {
 			} elseif ($i == -2) {
-			} else if ($i == -3) {
+			} elseif ($i == -3) {
 			}
 		}
 		return number_format(microtime(true) - $time_start, 3);
 	}
 
 	/**
+	 * @param  bool|boolean $text
+	 * @param  bool|boolean $bmvc
 	 * @return string
 	 */
-	public static function memory($text=false): string
+	public static function memory(bool $text=false, bool $bmvc=true): string
 	{
+		$memory = (($bmvc && defined('MEMORY')) ? MEMORY : round(memory_get_usage() / 1024, 2));
 		if ($text) {
-			return "Memory Usage: " . round(memory_get_usage() / 1024, 2) . " KB";
+			return "Memory Usage: " . $memory . " KB";
 		} else {
-			return round(memory_get_usage() / 1024, 2) . " KB";
+			return $memory . " KB";
 		}
 	}
 
@@ -119,7 +122,7 @@ class Benchmark
 			}
 		}
 
-		$return .= $line . "\n| " . str_pad("Total time", 12) . " : " . str_pad($total ." sec.", 19) . " |\n| " . str_pad("Memory Usage", 12) . " : " . str_pad(self::memory(), 19) . " |\n$line </pre>";
+		$return .= $line . "\n| " . str_pad("Total time", 12) . " : " . str_pad($total ." sec.", 19) . " |\n| " . str_pad("Memory Usage", 12) . " : " . str_pad(self::memory(false, false), 19) . " |\n$line </pre>";
 		return $return;
 	}
 }

@@ -6,9 +6,9 @@
  * Mirarus BMVC
  * @package BMVC\Libs
  * @author  Ali Güçlü (Mirarus) <aliguclutr@gmail.com>
- * @link https://github.com/mirarus/bmvc-core
+ * @link https://github.com/mirarus/bmvc-libs
  * @license http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version 1.1
+ * @version 1.3
  */
 
 namespace BMVC\Libs;
@@ -206,7 +206,7 @@ class CommandClearLog extends SymfonyCommand
 
 	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
-		array_map('unlink', glob(Dir::app("Logs/*")));
+		array_map('unlink', glob(FS::app("Logs/*")));
 
 		$output->writeln([
 			'',
@@ -222,12 +222,12 @@ function CmakeCM(string $type, string $class): array
 {
 	$useLib = ucfirst($type);
 
-	$class = Dir::replace($class);
+	$class = FS::replace($class);
 	$file = $class . '.php';
 
-	$parts = Dir::explode($class);
+	$parts = FS::explode($class);
 	$class = array_pop($parts);
-	$ns    = Dir::implode($parts);
+	$ns    = FS::implode($parts);
 
 	if (file_exists($file)) {
 
@@ -237,7 +237,7 @@ function CmakeCM(string $type, string $class): array
 		];
 	} else {
 
-		$ns ? Dir::mk_dir($ns) : null;
+		$ns ? FS::mk_dir($ns) : null;
 		$namespace = $ns ? "namespace $ns;\n\n" : null;
 
 		$f = fopen($file, 'w');

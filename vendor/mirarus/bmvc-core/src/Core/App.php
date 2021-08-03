@@ -8,12 +8,12 @@
  * @author  Ali Güçlü (Mirarus) <aliguclutr@gmail.com>
  * @link https://github.com/mirarus/bmvc-core
  * @license http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version 7.1
+ * @version 8.0
  */
 
 namespace BMVC\Core;
 
-use BMVC\Libs\{Dir, CL, Whoops, Log, Request};
+use BMVC\Libs\{FS, CL, Whoops, Log, Request, Header};
 use Dotenv\Dotenv;
 
 final class App
@@ -22,13 +22,15 @@ final class App
 	/**
 	 * @var boolean
 	 */
-	private static $init = false;
+	private static $active = false;
 	
 	public static $dotenv;
 	public static $url;
 	public static $page;
 	public static $timezone;
 	public static $environment;
+	public static $microtime;
+	public static $memory;
 
 	/**
 	 * @var array
@@ -44,7 +46,7 @@ final class App
 	 */
 	public function __construct(array $data=[])
 	{
-		self::Run($data);
+		# self::Run($data);
 	}
 
 	/**
@@ -60,7 +62,9 @@ final class App
 	 */
 	public static function Run(array $data=[]): void
 	{
-		if (self::$init == true) return;
+		if (self::$active == true) return;
+
+		$microtime = microtime(true);
 
 		self::initDotenv();
 		self::initDefine();
@@ -73,13 +77,27 @@ final class App
 
 		if (@$data['namespaces'] != null) self::$namespaces = $data['namespaces'];
 
-		Controller::namespace(@self::$namespaces['controller']);
-		Model::namespace(@self::$namespaces['model']);
-		View::namespace((@self::$namespaces['view'] ? self::$namespaces['view'] : @$_ENV['VIEW_DIR']));
+		if (@self::$namespaces['controller']) {
+			Controller::namespace(@self::$namespaces['controller']);
+		}
+		if (@self::$namespaces['model']) {
+			Model::namespace(@self::$namespaces['model']);
+		}
+		if (@self::$namespaces['view'] || @$_ENV['VIEW_DIR']) {
+			View::namespace((@self::$namespaces['view'] ? self::$namespaces['view'] : @$_ENV['VIEW_DIR']));
+		}
 
 		self::initRoute();
 
-		self::$init = true;
+		# MICROTIME
+		self::$microtime = number_format(microtime(true) - $microtime, 3);
+		@define('MICROTIME', self::$microtime);
+
+		# MEMORY
+		self::$memory = round(memory_get_usage() / 1024, 2);
+		@define('MEMORY', self::$memory);
+
+		self::$active = true;
 	}
 
 	/**
@@ -149,7 +167,7 @@ final class App
 
 	private static function initDotenv(): void
 	{
-		$dotenv = Dotenv::createImmutable(Dir::app());
+		$dotenv = Dotenv::createImmutable(FS::app());
 		$dotenv->safeLoad();
 		self::$dotenv = $dotenv;
 	}
@@ -244,15 +262,11 @@ final class App
 	{
 		if (session_status() !== PHP_SESSION_ACTIVE || session_id() === null) {
 			@ini_set('session.use_only_cookies', 1);
-			if (PHP_VERSION_ID < 70300) {
-				@session_set_cookie_params(3600 * 24, base_url(null, false, false, true)['path'], null, null, true);
-			} else {
-				@session_set_cookie_params([
-					'lifetime' => 3600 * 24,
-					'httponly' => true,
-					'path' => base_url(null, false, false, true)['path']
-				]);
-			}
+			@session_set_cookie_params([
+				'lifetime' => 3600 * 24,
+				'httponly' => true,
+				'path' => base_url(null, false, false, true)['path']
+			]);
 			@session_name("BMVC");
 			@session_start();
 		}
@@ -303,6 +317,10 @@ final class App
 
 	private static function initRoute()
 	{
+		if (@$_ENV['PUBLIC_DIR'] && strpos(Request::server('REQUEST_URI'), @$_ENV['PUBLIC_DIR'])) {
+			redirect(str_replace(@$_ENV['PUBLIC_DIR'], '/', Request::server('REQUEST_URI')));
+		}
+
 		Route::Run($route);
 
 		if (@$route) {
@@ -316,6 +334,9 @@ final class App
 			}
 
 			Controller::call(@$route['action'], @$route['params']);
+
+			if (@$route['_return'] && !Header::check_type(@$route['_return'])) Route::get_404();
+
 		} elseif (@Route::$notFound) {
 			Controller::call(Route::$notFound);
 		}

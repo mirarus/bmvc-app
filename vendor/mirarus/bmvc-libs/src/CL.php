@@ -8,13 +8,24 @@
  * @author  Ali Güçlü (Mirarus) <aliguclutr@gmail.com>
  * @link https://github.com/mirarus/bmvc-libs
  * @license http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version 1.2
+ * @version 1.3
  */
 
 namespace BMVC\Libs;
 
 class CL
 {
+
+	/**
+	 * @param  string       $class
+	 * @param  bool|boolean $autoload
+	 * @return boolean
+	 */
+	public static function is_class(string $class, bool $autoload=true): bool
+	{
+		$class = self::replace($class);
+		return class_exists($class, $autoload);
+	}
 
 	/**
 	 * @param mixed $arg

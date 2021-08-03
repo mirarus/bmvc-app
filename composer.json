@@ -1,6 +1,6 @@
 {
-	"name": "mirarus/bmvc-app",
-	"description": "Mirarus BMVC App (Basic MVC)",
+	"name": "mirarus/bmvc",
+	"description": "Mirarus BMVC (Basic MVC)",
 	"type": "project",
 	"license": "MIT",
 	"authors": [
